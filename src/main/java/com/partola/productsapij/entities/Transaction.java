@@ -1,6 +1,7 @@
 package com.partola.productsapij.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Timestamp;
 
@@ -9,6 +10,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "transactions")
+@Data
 public class Transaction {
     @Id
     @Column(name = "transaction_id")
