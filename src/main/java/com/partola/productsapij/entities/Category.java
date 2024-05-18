@@ -1,9 +1,6 @@
 package com.partola.productsapij.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 /**
@@ -15,6 +12,7 @@ import lombok.Data;
 public class Category {
     @Id
     @Column(name = "category_id")
+    @GeneratedValue
     private Long categoryId;
     @Column(name = "name")
     private String name;

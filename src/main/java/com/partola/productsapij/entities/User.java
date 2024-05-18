@@ -1,9 +1,6 @@
 package com.partola.productsapij.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 /**
@@ -15,6 +12,7 @@ import lombok.Data;
 public class User {
     @Id
     @Column(name = "user_id")
+    @GeneratedValue
     private Long userId;
     @Column(name = "wallet_id")
     private String walletId;

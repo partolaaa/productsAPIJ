@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 public class Transaction {
     @Id
     @Column(name = "transaction_id")
+    @GeneratedValue
     private Long transactionId;
     @Column(name = "txid")
     private Long txId;

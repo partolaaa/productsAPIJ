@@ -1,5 +1,6 @@
 package com.partola.productsapij.mappers;
 
+import com.partola.productsapij.dto.FullProductDTO;
 import com.partola.productsapij.dto.PlainProductDTO;
 import com.partola.productsapij.entities.Product;
 import org.mapstruct.Mapper;
@@ -13,4 +14,7 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public abstract class ProductMapper {
     @Mapping(source = "user.userId", target = "userId")
     public abstract PlainProductDTO toPlainProductDTO(Product product);
+
+    @Mapping(source = "user.userId", target = "userId")
+    public abstract FullProductDTO toFullProductDTO(Product product);
 }

@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 public class Product {
     @Id
     @Column(name = "product_id")
+    @GeneratedValue
     private Long productId;
     @Column(name = "name")
     private String name;
