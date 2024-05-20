@@ -13,6 +13,10 @@ import com.partola.productsapij.repositories.UsersRepository;
 import com.partola.productsapij.util.ProductsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,5 +70,11 @@ public class ProductsService {
             throw new ProductNotFoundException("Product with id " + productId + " was not found");
         }
         productsRepository.delete(product);
+    }
+
+    public Page<PlainProductDTO> getFilteredProducts(String title, List<Integer> categoryIds, int limit, int offset) {
+        Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("datetime").descending());
+        Page<Product> page = productsRepository.findAllByFilters(title, categoryIds, pageable);
+        return page.map(productMapper::toPlainProductDTO);
     }
 }

@@ -11,11 +11,13 @@ import com.partola.productsapij.util.ProductsUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Ivan Partola
@@ -26,7 +28,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductsController {
     private final ProductsService productsService;
-    private final JwtUtil jwtUtil;
     @GetMapping("/wallet/{walletId}")
     @ResponseBody
     public ResponseEntity<List<PlainProductDTO>> getAllListingsByWallet(@PathVariable String walletId) {
@@ -90,9 +91,13 @@ public class ProductsController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
         }
 
+        if (product.getPrice() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect price");
+        }
+
         String token = authorizationHeader.substring(7);
-        if (jwtUtil.validateToken(token)) {
-            Claims claims = jwtUtil.getClaims(token);
+        if (JwtUtil.validateToken(token)) {
+            Claims claims = JwtUtil.getClaims(token);
             String userId = claims.get("http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata", String.class);
 
             productsService.createProduct(ProductsUtil.preBuildProduct(product, Long.parseLong(userId)));
@@ -100,6 +105,19 @@ public class ProductsController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
         }
+    }
+
+    @GetMapping("/get-products")
+    public ResponseEntity<?> getProducts(@RequestParam(defaultValue = "40") int limit,
+                                         @RequestParam Optional<String> title,
+                                         @RequestParam Optional<List<Integer>> categoryId,
+                                         @RequestParam(defaultValue = "0") int offset) {
+
+        String titleValue = title.orElse(null);
+        List<Integer> categoryIds = categoryId.orElse(null);
+
+        Page<PlainProductDTO> products = productsService.getFilteredProducts(titleValue, categoryIds, limit, offset);
+        return ResponseEntity.ok(products.getContent());
     }
 
     @ExceptionHandler(WalletNotFoundException.class)
