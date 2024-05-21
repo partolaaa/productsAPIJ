@@ -1,4 +1,4 @@
-package com.partola.productsapij.dto;
+package com.partola.productsapij.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class FullProductDTO extends PlainProductDTO {
+public class FullProductDto extends PlainProductDto {
+
+    // TODO: why can't we have regular json property names like 'resourceLink'?
     @JsonProperty("resource_link")
     private String resourceLink;
-
 }
